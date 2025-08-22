@@ -72,7 +72,7 @@ except ImportError as e:
 torch.set_grad_enabled(False)
     
 # GroundingDINO config and checkpoint
-GROUNDING_DINO_CONFIG_PATH = os.path.join(GSA_CKPT_PATH, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
+GROUNDING_DINO_CONFIG_PATH = os.path.join(GSA_PYTHON_PATH, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
 GROUNDING_DINO_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./groundingdino_swint_ogc.pth")
 
 # Segment-Anything checkpoint
