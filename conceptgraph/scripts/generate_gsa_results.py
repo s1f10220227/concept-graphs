@@ -41,15 +41,21 @@ except ImportError as e:
 
 # Set up some path used in this script
 # Assuming all checkpoint files are downloaded as instructed by the original GSA repo
-if "GSA_PATH" in os.environ:
-    GSA_PATH = os.environ["GSA_PATH"]
+if "GSA_PYTHON_PATH" in os.environ:
+    GSA_PYTHON_PATH = os.environ["GSA_PYTHON_PATH"]
 else:
-    raise ValueError("Please set the GSA_PATH environment variable to the path of the GSA repo. ")
+    raise ValueError("Please set the GSA_PYTHON_PATH environment variable to the path of the GSA repo. ")
+
+if "GSA_CKPT_PATH" in os.environ:
+    GSA_CKPT_PATH = os.environ["GSA_CKPT_PATH"]
+else:
+    raise ValueError("Please set the GSA_CKPT_PATH environment variable to the path of the GSA repo. ")
     
 import sys
-TAG2TEXT_PATH = os.path.join(GSA_PATH, "")
-EFFICIENTSAM_PATH = os.path.join(GSA_PATH, "EfficientSAM")
-sys.path.append(GSA_PATH) # This is needed for the following imports in this file
+TAG2TEXT_PATH = os.path.join(GSA_CKPT_PATH, "")
+EFFICIENTSAM_PATH = os.path.join(GSA_CKPT_PATH, "EfficientSAM")
+sys.path.append(GSA_CKPT_PATH) # This is needed for the following imports in this file
+sys.path.append(GSA_PYTHON_PATH)
 sys.path.append(TAG2TEXT_PATH) # This is needed for some imports in the Tag2Text files
 sys.path.append(EFFICIENTSAM_PATH)
 
@@ -66,12 +72,12 @@ except ImportError as e:
 torch.set_grad_enabled(False)
     
 # GroundingDINO config and checkpoint
-GROUNDING_DINO_CONFIG_PATH = os.path.join(GSA_PATH, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
-GROUNDING_DINO_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./groundingdino_swint_ogc.pth")
+GROUNDING_DINO_CONFIG_PATH = os.path.join(GSA_CKPT_PATH, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
+GROUNDING_DINO_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./groundingdino_swint_ogc.pth")
 
 # Segment-Anything checkpoint
 SAM_ENCODER_VERSION = "vit_h"
-SAM_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./sam_vit_h_4b8939.pth")
+SAM_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./sam_vit_h_4b8939.pth")
 
 # Tag2Text checkpoint
 TAG2TEXT_CHECKPOINT_PATH = os.path.join(TAG2TEXT_PATH, "./tag2text_swin_14m.pth")
@@ -161,7 +167,7 @@ def get_sam_predictor(variant: str, device: str | int) -> SamPredictor:
     
     if variant == "mobilesam":
         from MobileSAM.setup_mobile_sam import setup_model
-        MOBILE_SAM_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./EfficientSAM/mobile_sam.pt")
+        MOBILE_SAM_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./EfficientSAM/mobile_sam.pt")
         checkpoint = torch.load(MOBILE_SAM_CHECKPOINT_PATH)
         mobile_sam = setup_model()
         mobile_sam.load_state_dict(checkpoint, strict=True)
@@ -172,7 +178,7 @@ def get_sam_predictor(variant: str, device: str | int) -> SamPredictor:
 
     elif variant == "lighthqsam":
         from LightHQSAM.setup_light_hqsam import setup_model
-        HQSAM_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./EfficientSAM/sam_hq_vit_tiny.pth")
+        HQSAM_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./EfficientSAM/sam_hq_vit_tiny.pth")
         checkpoint = torch.load(HQSAM_CHECKPOINT_PATH)
         light_hqsam = setup_model()
         light_hqsam.load_state_dict(checkpoint, strict=True)
@@ -255,7 +261,7 @@ def get_sam_mask_generator(variant:str, device: str | int) -> SamAutomaticMaskGe
         raise NotImplementedError
         # from ultralytics import YOLO
         # from FastSAM.tools import *
-        # FASTSAM_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./EfficientSAM/FastSAM-x.pt")
+        # FASTSAM_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./EfficientSAM/FastSAM-x.pt")
         # model = YOLO(args.model_path)
         # return model
     else:

@@ -15,7 +15,7 @@ def get_sam_predictor(cfg) -> SamPredictor:
     
     if cfg.sam_variant == "mobilesam":
         from MobileSAM.setup_mobile_sam import setup_model
-        # MOBILE_SAM_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./EfficientSAM/mobile_sam.pt")
+        # MOBILE_SAM_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./EfficientSAM/mobile_sam.pt")
         # checkpoint = torch.load(MOBILE_SAM_CHECKPOINT_PATH)
         checkpoint = torch.load(cfg.mobile_sam_path)
         mobile_sam = setup_model()
@@ -27,7 +27,7 @@ def get_sam_predictor(cfg) -> SamPredictor:
 
     elif cfg.sam_variant == "lighthqsam":
         from LightHQSAM.setup_light_hqsam import setup_model
-        HQSAM_CHECKPOINT_PATH = os.path.join(GSA_PATH, "./EfficientSAM/sam_hq_vit_tiny.pth")
+        HQSAM_CHECKPOINT_PATH = os.path.join(GSA_CKPT_PATH, "./EfficientSAM/sam_hq_vit_tiny.pth")
         checkpoint = torch.load(HQSAM_CHECKPOINT_PATH)
         light_hqsam = setup_model()
         light_hqsam.load_state_dict(checkpoint, strict=True)
